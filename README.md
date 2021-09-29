@@ -12,8 +12,7 @@
 - Execute the following command
 
 ```PowerShell
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://github.com/TrisBits/Install-WorkstationSoftware/-/raw/master/src/Install-WorkstationSoftware.ps1'))
-
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/TrisBits/Install-WorkstationSoftware/main/src/Install-WorkstationSoftware.ps1'))
 ```
 
 ## Alternate Instructions
