@@ -1,0 +1,35 @@
+{
+    // cleans up whitespace
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    // formatting style this project adheres to: https://en.wikipedia.org/wiki/Indentation_style#Variant:_1TBS_(OTBS)
+    "powershell.codeFormatting.preset": "OTBS",
+    // editor settings for formatting standards on this project
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    // editor settings that will auto add the closing quote or curly brace
+    "editor.autoClosingBrackets": "always",
+    "editor.autoClosingQuotes": "always",
+    "editor.autoSurround": "languageDefined",
+    // git settings to set autofetch and commit preferences
+    "git.autofetch": true,
+    "git.autofetchPeriod": 1200,
+    "git.enableSmartCommit": true,
+    // markdown language settings
+    "[markdown]": {
+        "editor.wordWrap": "off",
+        "editor.detectIndentation": false,
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.quickSuggestions": false
+    },
+    "markdownlint.config": {
+        "default": true,
+        "MD033": false,
+        "no-hard-tabs": true
+    }
+}
