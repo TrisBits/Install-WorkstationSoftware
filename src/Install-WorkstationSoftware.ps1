@@ -22,7 +22,8 @@ Function Set-PowerShell {
 
     if ($currentVersionPowerShellGet -eq $installedVersionPowerShellGet) {
         Write-Host "The current version of PowerShellGet ($($currentVersionPowerShellGet)) is already installed."
-    } else {
+    }
+    else {
         Write-Host "An older version of PowerShellGet is installed, updating $($installedVersionPowerShellGet) to $($currentVersionPowerShellGet)"
         Install-Module -Name PowerShellGet -Force -AllowClobber -WarningAction SilentlyContinue
     }
@@ -39,19 +40,22 @@ Function Install-WinGet {
 
     Try {
         $installedVersionWinGet = Invoke-Expression 'winget --version'
-    } Catch {
+    }
+    Catch {
         $installedVersionWinGet = $null
     }
 
     if ($currentVersionWinGet -eq $installedVersionWinGet) {
         Write-Host "The current version of winget ($($currentVersionWinGet)) is already installed"
-    } elseif ($currentVersionWinGet -gt $installedVersionWinGet -and $null -ne $installedVersionWinGet) {
+    }
+    elseif ($currentVersionWinGet -gt $installedVersionWinGet -and $null -ne $installedVersionWinGet) {
         Write-Host "An older version of winget is installed, updating $($installedVersionWinGet) to $($currentVersionWinGet)"
         $progresspreference = 'silentlyContinue'
         Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $InstallerWinGet
         Add-AppxPackage -Path $InstallerWinGet -Update
         $progressPreference = 'Continue'
-    } else {
+    }
+    else {
         Write-Host "Installing winget $($currentVersionWinGet)"
 
         $progresspreference = 'silentlyContinue'
@@ -71,7 +75,7 @@ Function Install-WinGetSoftware {
         [string] $Id
     )
 
-    if ((Invoke-Expression "winget list --exact --id $Id") -eq 'No installed package found matching input criteria.') {
+    if ((Invoke-Expression "winget list --exact --id $Id --accept-source-agreements") -eq 'No installed package found matching input criteria.') {
         Invoke-Expression "winget install --exact --id $Id"
     }
 }
@@ -91,11 +95,13 @@ Function Join-PrependIdempotent {
 
         "$InputString".TrimEnd("$Delimiter") + "$Delimiter" + "$OriginalString".TrimStart("$Delimiter")
 
-    } elseif (! $CaseSensitive -and ("$OriginalString" -inotlike "*${InputString}*")) {
+    }
+    elseif (! $CaseSensitive -and ("$OriginalString" -inotlike "*${InputString}*")) {
 
         "$InputString".TrimEnd("$Delimiter") + "$Delimiter" + "$OriginalString".TrimStart("$Delimiter")
 
-    } else {
+    }
+    else {
 
         "$OriginalString"
 
@@ -118,11 +124,13 @@ Function Join-AppendIdempotent {
 
         "$OriginalString".TrimEnd("$Delimiter") + "$Delimiter" + "$InputString".TrimStart("$Delimiter")
 
-    } elseif (! $CaseSensitive -and ("$OriginalString" -inotlike "*${InputString}*")) {
+    }
+    elseif (! $CaseSensitive -and ("$OriginalString" -inotlike "*${InputString}*")) {
 
         "$OriginalString".TrimEnd("$Delimiter") + "$Delimiter" + "$InputString".TrimStart("$Delimiter")
 
-    } else {
+    }
+    else {
 
         "$OriginalString"
 
@@ -143,7 +151,8 @@ Function Add-Path {
         # we need to do this to make sure not to expand the environment variables already inside the PATH
         if ($Target -eq 'User') {
             $Key = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey('Environment', $true)
-        } elseif ($Target -eq 'System') {
+        }
+        elseif ($Target -eq 'System') {
             $Key = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey('SYSTEM\CurrentControlSet\Control\Session Manager\Environment', $true)
         }
 
@@ -153,14 +162,16 @@ Function Add-Path {
         # in order to make sure this method is idempotent, we need to check if the new path already exists, this requires having a semicolon at the very end
         if ($Style -eq 'Prepend') {
             $key.SetValue('Path', (Join-PrependIdempotent ("$NewPath".TrimEnd(';') + ';') ("$Path".TrimEnd(';') + ';') ';' $false), 'ExpandString')
-        } elseif ($Style -eq 'Append') {
+        }
+        elseif ($Style -eq 'Append') {
             $key.SetValue('Path', (Join-AppendIdempotent ("$NewPath".TrimEnd(';') + ';') ("$Path".TrimEnd(';') + ';') ';' $false), 'ExpandString')
         }
 
         # update the path for the current process as well
         #$Env:Path = $key.GetValue('Path', $null)
 
-    } finally {
+    }
+    finally {
         $key.Dispose()
     }
 }
