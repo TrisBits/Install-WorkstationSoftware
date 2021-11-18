@@ -14,7 +14,13 @@ Function Set-PowerShell {
     }
 
     Write-Host "Verify latest NuGet version installed."
-    Install-PackageProvider -Name NuGet -Force
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+
+    $galleryInstallationPolicy = (Get-PSRepository -Name PSGallery).InstallationPolicy
+    if ($galleryInstallationPolicy -ne 'Trusted') {
+        Write-Host "Set PowerShell to Trust PowerShell Gallery as an install source"
+        Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+    }
 
     Write-Host "Checking PowerShell Gallery to verify what is the latest version of PowerShellGet."
     [version]$currentVersionPowerShellGet = (Find-Module -Name PowerShellGet).Version
