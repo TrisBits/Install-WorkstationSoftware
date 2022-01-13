@@ -51,7 +51,7 @@ Function Install-WinGet {
         $installedVersionWinGet = $null
     }
 
-    if ($currentVersionWinGet -eq $installedVersionWinGet) {
+    if ($currentVersionWinGet -le $installedVersionWinGet) {
         Write-Host "The current version of winget ($($currentVersionWinGet)) is already installed"
     }
     elseif ($currentVersionWinGet -gt $installedVersionWinGet -and $null -ne $installedVersionWinGet) {
